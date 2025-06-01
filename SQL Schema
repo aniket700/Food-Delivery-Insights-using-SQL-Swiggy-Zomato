@@ -1,0 +1,67 @@
+A. Top Restaurants by Rating
+SELECT name, rating
+FROM restaurants
+ORDER BY rating DESC;
+
+name	rating
+Biryani Express	4.5
+Pizza Town	4.2
+
+B. Most Ordered Items
+SELECT item_name, COUNT(*) AS total_orders
+FROM order_items
+GROUP BY item_name
+ORDER BY total_orders DESC;
+
+Output:
+
+item_name	total_orders
+Chicken Biryani	1
+Coke	1
+Veg Pizza	1
+Cheese Burst Pizza	1
+
+C. Highest Spending Customer
+SELECT c.name, SUM(o.amount) AS total_spent
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+WHERE o.status = 'Delivered'
+GROUP BY c.name
+ORDER BY total_spent DESC;
+name	total_spent
+Tejas	1000.00
+
+
+D. Average Delivery Delay by Restaurant
+SELECT r.name, AVG(d.delay_minutes) AS avg_delay
+FROM restaurants r
+JOIN orders o ON r.restaurant_id = o.restaurant_id
+JOIN delivery d ON o.order_id = d.order_id
+GROUP BY r.name
+ORDER BY avg_delay;
+Output:
+
+name	avg_delay
+Biryani Express	0
+Pizza Town	15
+
+ E. Monthly Orders Trend
+SELECT DATE_TRUNC('month', order_time) AS month, COUNT(*) AS total_orders
+FROM orders
+GROUP BY month
+ORDER BY month;
+Output:
+
+month	total_orders
+2024-05-01	3
+
+SELECT r.name, COUNT(*) AS cancelled_orders
+FROM orders o
+JOIN restaurants r ON o.restaurant_id = r.restaurant_id
+WHERE o.status = 'Cancelled'
+GROUP BY r.name;
+Output:
+
+name	cancelled_orders
+Pizza Town	1
+
